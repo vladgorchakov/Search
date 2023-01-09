@@ -3,7 +3,7 @@ import pathlib
 
 class FileSearchEngine:
     
-    def __init__(self, file_dir, exts = ['txt']):
+    def __init__(self, file_dir, exts = ['pdf', 'py']):
         self.exts = exts
         self.file_dir = file_dir
         self.__found_files = {ext: [[], 0] for ext in self.exts}
@@ -23,7 +23,12 @@ class FileSearchEngine:
             if files:
                 self.add_found_files(files, e)
             
-            return self.__found_files
+        return self.__found_files
+    
+    
+    def get_files_counter(self):
+        return {e: file[1] for e, file in self.__found_files.items()}
+        
 
 
 def main():
@@ -33,7 +38,8 @@ def main():
         if files[1] > 0:
             for file in files[0]:
                 print(file)
-
+    
+    print(fs.get_files_counter())
 
 if __name__ == '__main__':
     main()
