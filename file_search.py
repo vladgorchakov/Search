@@ -3,7 +3,7 @@ import pathlib
 
 class FileSearchEngine:
     
-    def __init__(self, file_dir, exts = ['pdf', 'py']):
+    def __init__(self, file_dir, exts = ['pdf',]):
         self.exts = exts
         self.file_dir = file_dir
         self.__found_files = {ext: [[], 0] for ext in self.exts}
@@ -11,11 +11,13 @@ class FileSearchEngine:
     
     def add_found_files(self, files, ext):
         for file in files:
-            self.__found_files[ext][0].append(file)
-            self.__found_files[ext][1] += 1
+            if file not in self.__found_files[ext][0]:
+                self.__found_files[ext][0].append(file)
+                self.__found_files[ext][1] += 1
     
     
-    def search_recursively(self):
+    @property
+    def found_files(self):
         for e in self.__found_files.keys():
             file_ext = r"**\*." + e
             files = list(pathlib.Path(self.file_dir).glob(file_ext))
@@ -25,26 +27,15 @@ class FileSearchEngine:
             
         return self.__found_files
     
-    
-    @property
-    def found_files(self):
-        return self.search_recursively()
-        
-    
-    def get_files_counter(self):
-        
-        return {e: file[1] for e, file in self.found_files.items()}
-        
         
 def main():
     fs = FileSearchEngine(r'd:\\')
-    for ext, files in fs.search_recursively().items():
+    for ext, files in fs.found_files.items():
         print(f'{ext} ({files[1]}): ')
         if files[1] > 0:
             for file in files[0]:
                 print(file)
     
-    # print(fs.get_files_counter())
 
 if __name__ == '__main__':
     main()
