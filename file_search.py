@@ -26,11 +26,16 @@ class FileSearchEngine:
         return self.__found_files
     
     
-    def get_files_counter(self):
-        return {e: file[1] for e, file in self.__found_files.items()}
+    @property
+    def found_files(self):
+        return self.search_recursively()
         
-
-
+    
+    def get_files_counter(self):
+        
+        return {e: file[1] for e, file in self.found_files.items()}
+        
+        
 def main():
     fs = FileSearchEngine(r'd:\\')
     for ext, files in fs.search_recursively().items():
@@ -39,7 +44,7 @@ def main():
             for file in files[0]:
                 print(file)
     
-    print(fs.get_files_counter())
+    # print(fs.get_files_counter())
 
 if __name__ == '__main__':
     main()
